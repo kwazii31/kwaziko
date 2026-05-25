@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000000;
+            color: white;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #a30000;
+            margin-bottom: 40px;
+            background: rgb(0, 0, 0);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            color : white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Blog</h1>
+    </header>
+
+    <div class="container">
+        <p>Hiya! My name is Kwaz and I'm a teen software and coding enthusiast! I will be posting tutorials and blogs on here and even some files :D</p>
+    </div>
+
+<div class="file-item">
+  <div class="file-info">
+    <div>This is the source code for the website</div>
+    <h3>MyFile.pdf</h3>
+    <div class="file-meta">PDF • 2.4 MB</div>
+  </div>
+  <a href="sorcecode.txt" class="download-btn">Download</a>
+</div>
+
+<div class="file-item">
+  <div class="file-info">
+    <h3>example.txt</h3>
+    <div class="file-meta">Text • 12 KB</div>
+  </div>
+  <a href="example.txt" class="download-btn">Download</a>
+</div>
+
+
+</body>
+</html>
