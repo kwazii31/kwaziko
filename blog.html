@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 5px rgba(163, 0, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 15px rgba(163, 0, 0, 0.6);
+            }
+        }
+
+        @keyframes buttonClick {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.98);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: white;
+            line-height: 1.6;
+        }
+
+        #site-root {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
+            pointer-events: none;
+        }
+
+        body.site-ready #site-root {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        #startup-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #startup-screen.startup-exit {
+            animation: startupExit 0.8s ease forwards;
+        }
+
+        .startup-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.05) saturate(0.95);
+        }
+
+        .startup-tint {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.65));
+        }
+
+        .startup-shapes {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            place-items: center;
+            pointer-events: none;
+        }
+
+        .startup-ring {
+            width: min(38vw, 280px);
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 110, 110, 0.7);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.45), inset 0 0 20px rgba(255, 0, 0, 0.35);
+            animation: ringSpin 2.6s linear infinite, ringPulse 1.5s ease-in-out infinite;
+        }
+
+        .startup-ring::before,
+        .startup-ring::after {
+            content: "";
+            position: absolute;
+            inset: 14%;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 140, 140, 0.55);
+            animation: ringSpin 1.8s linear infinite reverse;
+        }
+
+        .startup-ring::after {
+            inset: 28%;
+            border-style: solid;
+            border-color: rgba(255, 190, 190, 0.4);
+            animation-duration: 1.2s;
+        }
+
+        @keyframes ringSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: scale(0.95); opacity: 0.85; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+
+        @keyframes startupExit {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        header {
+            position: relative;
+            text-align: center;
+            min-height: 300px;
+            padding: 24px 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            border-bottom: 1px solid #a30000;
+            margin-bottom: 40px;
+            background: #040404;
+            overflow: hidden;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .header-video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.08) saturate(0.95);
+            z-index: 0;
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.7));
+            z-index: 1;
+        }
+
+        header h1 {
+            font-size: 3.3em;
+            color: #a30000;
+            letter-spacing: 2px;
+            animation: slideInDown 0.8s ease-out;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 14px;
+            text-shadow: 0 0 14px rgba(163, 0, 0, 0.45);
+        }
+        .cursive {
+            font-family: 'Cursive', sans-serif;
+            color: #a30000;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 34px;
+            color: white;
+            background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
+            border: 5px solid rgba(255, 0, 0, 0.35);
+            border-radius: 18px;
+            line-height: 1.8;
+            animation: slideInUp 0.8s ease-out;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+        }
+
+        .container p {
+            font-size: 1.1em;
+        }
+
+        .files-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 34px;
+            color: white;
+            background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
+            border: 5px solid rgba(255, 0, 0, 0.35);
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+            animation: slideInUp 0.8s ease-out;
+        }
+
+        .files-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 24px;
+            color: #a30000;
+            letter-spacing: 1px;
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        .file-item {
+            background: rgba(10, 10, 10, 0.85);
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #a30000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .file-item:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .file-item:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .file-item:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .file-item:hover {
+            background: #151515;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(163, 0, 0, 0.5);
+            transform: translateY(-5px);
+        }
+
+        .file-info h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            color: white;
+        }
+
+        .file-meta {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .download-btn {
+            background: #a30000;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .download-btn:hover {
+            background: #ff0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
+
+        .download-btn:active {
+            animation: buttonClick 0.3s ease;
+        }
+
+        .normal-text {
+            font-size: 1.1em;
+            color: #a30000;
+        }
+        .myself {
+            font-family: cursive;
+            color: #a30000;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .tabs-shell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 44px;
+            border: 2px solid #a30000;
+            border-radius: 14px;
+            padding: 10px 14px;
+            background: rgba(10, 0, 0, 0.55);
+            max-width: 1200px;
+            width: 96%;
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+            animation: slideInDown 0.8s ease-out 0.2s both;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1em;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            color: #a30000;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            color: #a30000;
+            border-bottom: 3px solid #a30000;
+            animation: glowPulse 1.5s ease-in-out;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .other-panel {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 34px;
+            color: white;
+            background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
+            border: 3px solid rgba(255, 0, 0, 0.35);
+            border-radius: 18px;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+        }
+
+        .other-header {
+            margin-bottom: 26px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid rgba(255, 0, 0, 0.22);
+        }
+
+        .other-kicker {
+            display: inline-block;
+            margin-bottom: 10px;
+            padding: 6px 100px;
+            border-radius: 999px;
+            background: rgba(255, 0, 0, 0.12);
+            color: #ff6b6b;
+            font-size: 2em;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .other-title {
+            margin-bottom: 8px;
+            color: #ff4d4d;
+            font-size: 2em;
+        }
+
+        .tab-content ul {
+            margin: 12px 0 0 20px;
+            color: #e5d4d4;
+        }
+
+        .tab-content li {
+            margin-bottom: 8px;
+        }
+
+        .other-subtitle {
+            color: #d0b6b6;
+            font-size: 1.05em;
+        }
+
+        #github-downloads .other-panel {
+            color: #f3e7e7;
+        }
+
+        #github-downloads .other-title {
+            color: #ff4d4d;
+        }
+
+        #github-downloads .other-subtitle {
+            color: #d0b6b6;
+        }
+
+        #github-downloads .file-info h3 {
+            color: #ffffff;
+        }
+
+        #github-downloads .file-meta {
+            color: #999999;
+        }
+
+        #github-downloads .download-btn {
+            color: #ffffff;
+        }
+
+        .other-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .other-card {
+            padding: 18px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        }
+
+        .other-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 0, 0, 0.45);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .other-card h3 {
+            margin-bottom: 8px;
+            color: #ffd7d7;
+            font-size: 1.06em;
+        }
+
+        .other-card p {
+            margin-bottom: 14px;
+            color: #c6b8b8;
+            font-size: 0.96em;
+        }
+
+        .other-downloads {
+            display: grid;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        @keyframes textGlow {
+        0%, 100% {
+            text-shadow: 0 0 6px rgba(255, 77, 77, 0.7), 0 0 14px rgba(255, 0, 0, 0.5);
+        }
+        50% {
+            text-shadow: 0 0 10px rgba(255, 120, 120, 1), 0 0 24px rgba(255, 0, 0, 0.85);
+        }
+        }
+
+        .glow-text-animated {
+          color: #ff8787;
+         animation: textGlow 1.5s ease-in-out infinite;
+                        font-size: 6.5em;
+        }
+
+        .other-downloads .file-item {
+            margin-bottom: 0;
+            background: rgba(10, 10, 10, 0.95);
+        }
+
+        @media (max-width: 900px) {
+            header {
+                min-height: 220px;
+                margin-bottom: 24px;
+                padding: 18px 14px;
+            }
+
+            header h1 {
+                font-size: clamp(2rem, 7vw, 2.6rem);
+                letter-spacing: 1px;
+                margin-bottom: 8px;
+            }
+
+            .tabs-shell {
+                width: 94%;
+                gap: 8px;
+                padding: 8px;
+                margin-bottom: 24px;
+            }
+
+            .tab-btn {
+                flex: 1 1 calc(50% - 8px);
+                min-height: 44px;
+                padding: 10px 8px;
+                font-size: 0.92em;
+                line-height: 1.2;
+            }
+
+            .container,
+            .files-section,
+            .other-panel {
+                width: 94%;
+                padding: 20px;
+                border-width: 2px;
+            }
+
+            .container p,
+            .normal-text,
+            .other-subtitle,
+            .file-meta {
+                font-size: 0.98em;
+            }
+
+            .files-section h2,
+            .other-title {
+                font-size: 1.5em;
+            }
+
+            .other-kicker {
+                font-size: 1em;
+                padding: 6px 14px;
+                letter-spacing: 0.06em;
+            }
+
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+                padding: 16px;
+            }
+
+            .download-btn {
+                width: 100%;
+                text-align: center;
+                padding: 11px 14px;
+            }
+
+            .other-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .glow-text-animated {
+                font-size: 3.2em;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .tab-btn {
+                flex-basis: 100%;
+            }
+
+            .container,
+            .files-section,
+            .other-panel {
+                width: 95%;
+                padding: 16px;
+            }
+
+            .other-kicker {
+                display: block;
+                width: fit-content;
+                max-width: 100%;
+                font-size: 0.9em;
+            }
+
+            .startup-ring {
+                width: min(56vw, 220px);
+            }
+        }
+
+    </style>
+</head>
+        
+<body>
+    <div id="startup-screen" aria-hidden="true">
+        <video class="startup-video" autoplay muted playsinline>
+            <source src="startupbackround.mp4" type="video/mp4">
+        </video>
+        <div class="startup-tint"></div>
+        <div class="startup-shapes">
+            <div class="startup-ring"></div>
+            <h1 class="glow-text-animated">kwaziko.netlify.app</h1>
+        
+            
+        </div>
+    </div>
+
+    <div id="site-root">
+    <header>
+        <video class="header-video" autoplay muted loop playsinline aria-label="Top background video">
+            <source src="topvid.mp4" type="video/mp4">
+        </video>
+        <h1><span class="myself">kwaziko.netlify.app</span></h1>
+    </header>
+
+    <div class="tabs-shell">
+        <button class="tab-btn active" data-tab="home" onclick="showTab('home', this)">Home</button>
+        <button class="tab-btn" data-tab="projects" onclick="showTab('projects', this)">Projects</button>
+        <button class="tab-btn" data-tab="downloads" onclick="showTab('downloads', this)">Downloads</button>
+        <button class="tab-btn" data-tab="about" onclick="showTab('about', this)">About</button>
+        <button class="tab-btn" data-tab="blog" onclick="showTab('blog', this)">Blog</button>
+        <button class="tab-btn" data-tab="tutorials" onclick="showTab('tutorials', this)">Tutorials</button>
+        <button class="tab-btn" data-tab="github-downloads" onclick="showTab('github-downloads', this)">GitHub Downloads</button>
+        <button class="tab-btn" data-tab="website-updates" onclick="showTab('website-updates', this)">Website Updates</button>
+    </div>
+
+    <div class="tab-content active" id="home">
+        <div class="container">
+            <span class="other-kicker">home</span>
+            <p>Hiya! My name is <span class="myself">Kwaz</span> <span class="cursive"></span>and I'm a teen software and coding enthusiast!</span> I will be posting tutorials and blogs on here and even some files :D<br>I know alot about ai and machine learning!</p>
+            <p><span class="normal-text">My github is <a href="https://github.com/kwazii31" target="_blank">here</a></span></p>
+            <p><span class="normal-text">check out my other tabs to explore and check out my projects etc.</span></p>
+            <p><span class="normal-text">I will be updating this website alot and adding new content so check back often for updates!</span></p>
+            <p><span class="normal-text">my email is <a href="mailto:ehjarvis@protonmail.com">ehjarvis@protonmail.com</a></span></p>
+        </div>
+    </div>
+
+    <div class="tab-content" id="projects">
+        <div class="container">
+            <span class="other-kicker">My Projects</span>
+            <p>This section is for things I am currently building, testing, or polishing.</p>
+        </div>
+    </div>
+
+    <div class="tab-content" id="downloads">
+        <section class="files-section">
+            <span class="other-kicker">non-github downloads</span>
+                <p style="margin-bottom: 16px; color: #dfcfcf;">Direct downloads for scripts and fun files. More will be added as I finish new tools.</p>
+            <div class="file-item">
+                <div class="file-info">
+                    <h3>Source Code for this website</h3>
+                    <div class="file-meta">Text File</div>
+                </div>
+                <a href="sourcecode.txt" class="download-btn">Download</a>
+            </div>
+
+            <div class="file-item">
+                <div class="file-info">
+                    <h3>batpranks.txt</h3>
+                    <div class="file-meta">Text File</div>
+                </div>
+                <a href="batpranks.txt" class="download-btn">Download</a>
+            </div>
+
+            
+
+
+        </section>
+    </div>
+
+    <div class="tab-content" id="about">
+        <div class="container">
+            <span class="other-kicker">about me</span>
+            <p><strong>Age:</strong> Teen</p>
+            <p style="margin-top: 10px;"><strong>Skills:</strong> Python, HTML, a bit of JavaScript</p>
+            <p style="margin-top: 10px;"><strong>Interests:</strong> Coding, pranks, web dev</p>
+            <p style="margin-top: 10px;"><strong>Currently:</strong> Learning web development and building cool projects</p>
+            <p style="margin-top: 10px;"><strong>Goal:</strong> Keep leveling up and ship projects that are actually useful and fun.</p>
+            <p style="margin-top: 10px;"><strong>Learning Right Now:</strong> Better frontend design, cleaner code structure, and automation ideas.</p>
+        </div>
+    </div>
+
+    <div class="tab-content" id="blog">
+        <div class="container">
+            <span class="other-kicker">Blog</span>
+            <p><span class="normal-text">Quick updates, build logs, and random coding thoughts go here.</span></p>
+            <ul>
+                <li><strong>Post Idea:</strong>Ill post here soon:D.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="tab-content" id="tutorials">
+        <div class="container">
+            <span class="other-kicker">Tutorials</span>
+            <p>I will post beginner-friendly guides here with simple steps and downloadable examples.</p>
+            <ul>
+            </ul>
+            
+        </div>
+    </div>
+    
+    <div class="tab-content" id="github-downloads">
+        <section class="other-panel">
+            <div class="other-header">
+                <span class="other-kicker">GitHub downloads</span>
+                <p class="other-subtitle">A separate space for downloads directly from my GitHub</p>
+                <p class="other-subtitle">Unlike the downloads, these are downloads for GitHub repositories.</p>
+            </div>
+
+
+            <div class="other-grid">
+                    <div class="other-card">
+                        <a href="https://github.com/kwazii31" target="_blank" class="download-btn">Visit GitHub</a>
+                    </div>
+
+                    <div class="other-card">
+                        <span class="normal-text">I will update this whenever I update my projects or add more repositories.</span>
+                    </div>
+                </div>
+
+                <div class="other-downloads">
+                    <div class="file-item">
+                        <div class="file-info">
+                            <h3>pet_tool.py</h3>
+                            <div class="file-meta">Python Tool that makes it so you can create and run custom desktop pets and animate them.</div>
+                        </div>
+                        <a href="pet_tool.py" class="download-btn">Download</a>
+                    </div>
+
+                    <div class="file-item">
+                        <div class="file-info">
+                            <h3>Error Gen.exe</h3>
+                            <div class="file-meta">Windows App that lets you generate errors custom exe that when ran it pops up with your custom error message.</div>
+                        </div>
+                        <a href="Error Gen.exe" class="download-btn">Download</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    <div class="tab-content" id="website-updates">
+        <section class="other-panel">
+            <div class="other-header">
+                <span class="other-kicker">Updates</span>
+                <p class="other-subtitle">I will keep you informed about the latest changes and improvements to the website here.</p>
+            </div>
+
+            <div class="other-downloads">
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>kwaziko 1.1</h3>
+                        <div class="file-meta">Just published the website but mobile sucked, now fixed.</div>
+                    </div>
+                </div>
+
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>kwaziko V1</h3>
+                        <div class="file-meta">First build of the website. I'm very excited to share it with you, and update it regularly with new features and improvements:D</div>
+                    </div>
+                </div>
+
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>Coming Soon</h3>
+                        <div class="file-meta">More tutorials, more downloads, and extra polish across the site.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        const startupScreen = document.getElementById('startup-screen');
+        const startupVideo = document.querySelector('.startup-video');
+
+        if (startupVideo) {
+            startupVideo.play().catch(function () {});
+        }
+
+        window.setTimeout(function () {
+            if (startupScreen) {
+                startupScreen.classList.add('startup-exit');
+            }
+            document.body.classList.add('site-ready');
+        }, 2300);
+
+        window.setTimeout(function () {
+            if (startupScreen) {
+                startupScreen.remove();
+            }
+        }, 3200);
+    });
+
+    function showTab(tabName, clickedButton) {
+        // Hide all tabs
+        const tabs = document.querySelectorAll('.tab-content');
+        tabs.forEach(tab => tab.classList.remove('active'));
+        
+        // Deactivate all buttons
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+        
+        // Show selected tab
+        document.getElementById(tabName).classList.add('active');
+        
+        // Activate clicked button
+        if (clickedButton) {
+            clickedButton.classList.add('active');
+        } else {
+            const fallback = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+            if (fallback) fallback.classList.add('active');
+        }
+    }
+</script>
+</body>
+</html>
