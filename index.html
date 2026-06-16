@@ -657,6 +657,7 @@
         <button class="tab-btn" data-tab="website-updates" onclick="showTab('website-updates', this)">Website Updates</button>
         <button class="tab-btn" data-tab="pi5-dashboard" onclick="showTab('pi5-dashboard', this)">pi5 dashboard</button>
         <button class="tab-btn" data-tab="version" onclick="showTab('version', this)">Version</button>
+        <button class="tab-btn" data-tab="settings" onclick="showTab('settings', this)">Settings</button>
     </div>
 
     <div class="tab-content active" id="home">
@@ -842,6 +843,32 @@
                 <p class="other-subtitle">Recent changes and upcoming ideas for the site are summarized here.</p>
             </div>
             <div id="detailed-update-log" style="margin-top:12px;background:rgba(0,0,0,0.6);padding:12px;border-radius:8px;white-space:pre-wrap;color:#f3e7e7;display:none;"></div>
+        </section>
+    </div>
+
+    <div class="tab-content" id="settings">
+        <section class="other-panel">
+            <div class="other-header">
+                <span class="other-kicker">Settings</span>
+                <p class="other-subtitle">Customize background video behavior and appearance.</p>
+            </div>
+            <div style="margin-top:12px;color:#fff;">
+                <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-enable-video"> Enable background video</label>
+                <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-mute"> Mute video</label>
+                <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-loop"> Loop video</label>
+                <label style="display:block;margin-bottom:8px;">Select video:
+                    <select id="setting-select-video" style="margin-left:8px;padding:4px;background:#222;color:#fff;border-radius:4px;">
+                        <option value="startupbackround.mp4">Startup</option>
+                        <option value="topvid.mp4">Top</option>
+                        <option value="scary.mp4">Scary</option>
+                    </select>
+                </label>
+                <label style="display:block;margin:12px 0;">Opacity: <input id="setting-opacity" type="range" min="0" max="1" step="0.05" value="1" style="vertical-align:middle;width:160px;margin-left:8px;"></label>
+                <div style="margin-top:12px;">
+                    <button id="setting-save" class="download-btn">Save</button>
+                    <button id="setting-reset" class="download-btn" style="margin-left:8px;">Reset</button>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -1033,6 +1060,66 @@
     }
 
     window.addEventListener('load', loadUpdateLog);
+
+    // Settings persistence and application
+    const DEFAULT_BG_SETTINGS = {
+        enableVideo: true,
+        mute: true,
+        loop: true,
+        video: 'startupbackround.mp4',
+        opacity: 1
+    };
+
+    function applyBgSettings(s) {
+        const header = document.querySelector('.header-video');
+        const startup = document.querySelector('.startup-video');
+        const videos = [header, startup].filter(Boolean);
+        videos.forEach(v => {
+            v.style.opacity = s.opacity;
+            v.muted = !!s.mute;
+            v.loop = !!s.loop;
+            if (!s.enableVideo) v.style.display = 'none'; else v.style.display = '';
+        });
+        // set selected src for preview (startup)
+        if (startup && s.video) startup.querySelector('source').src = s.video; try { startup.load(); } catch(e){}
+        if (header && s.video) header.querySelector('source').src = s.video; try { header.load(); } catch(e){}
+    }
+
+    function saveBgSettings(s) { localStorage.setItem('bgSettings', JSON.stringify(s)); }
+    function loadBgSettings() { try { return JSON.parse(localStorage.getItem('bgSettings')) || DEFAULT_BG_SETTINGS; } catch(e) { return DEFAULT_BG_SETTINGS; } }
+
+    function initSettingsUI() {
+        const s = loadBgSettings();
+        const enable = document.getElementById('setting-enable-video');
+        const mute = document.getElementById('setting-mute');
+        const loop = document.getElementById('setting-loop');
+        const sel = document.getElementById('setting-select-video');
+        const op = document.getElementById('setting-opacity');
+        const save = document.getElementById('setting-save');
+        const reset = document.getElementById('setting-reset');
+
+        if (!enable) return;
+        enable.checked = !!s.enableVideo;
+        mute.checked = !!s.mute;
+        loop.checked = !!s.loop;
+        sel.value = s.video || DEFAULT_BG_SETTINGS.video;
+        op.value = s.opacity || DEFAULT_BG_SETTINGS.opacity;
+
+        const applyFromUI = () => {
+            const newS = { enableVideo: enable.checked, mute: mute.checked, loop: loop.checked, video: sel.value, opacity: parseFloat(op.value) };
+            applyBgSettings(newS);
+            saveBgSettings(newS);
+        };
+
+        [enable, mute, loop, sel, op].forEach(el => el.addEventListener('change', applyFromUI));
+        save.addEventListener('click', applyFromUI);
+        reset.addEventListener('click', function () { localStorage.removeItem('bgSettings'); const def = DEFAULT_BG_SETTINGS; enable.checked = def.enableVideo; mute.checked = def.mute; loop.checked = def.loop; sel.value = def.video; op.value = def.opacity; applyFromUI(); });
+
+        // apply initially
+        applyBgSettings(s);
+    }
+
+    window.addEventListener('load', initSettingsUI);
 </script>
 </body>
 </html>
