@@ -628,7 +628,7 @@
 <body>
     <div id="startup-screen" aria-hidden="true">
         <video class="startup-video" autoplay muted playsinline preload="auto">
-            <source src="videos%20for%20backround/startupbackround.mp4" type="video/mp4">
+            <source src="../videos/startupbackround.mp4" type="video/mp4">
         </video>
         <div class="startup-tint"></div>
         <div class="startup-shapes">
@@ -642,7 +642,7 @@
     <div id="site-root">
     <header>
         <video class="header-video" autoplay muted loop playsinline preload="auto" aria-label="Top background video">
-            <source src="videos%20for%20backround/topvid.mp4" type="video/mp4">
+            <source src="../videos/topvid.mp4" type="video/mp4">
         </video>
         <h1><span class="myself">kwaziko.netlify.app</span></h1>
     </header>
@@ -655,6 +655,8 @@
         <button class="tab-btn" data-tab="blog" onclick="showTab('blog', this)">Blog</button>
         <button class="tab-btn" data-tab="github-downloads" onclick="showTab('github-downloads', this)">GitHub Downloads</button>
         <button class="tab-btn" data-tab="website-updates" onclick="showTab('website-updates', this)">Website Updates</button>
+        <button class="tab-btn" data-tab="pi5-dashboard" onclick="showTab('pi5-dashboard', this)">pi5 dashboard</button>
+        <button class="tab-btn" data-tab="version" onclick="showTab('version', this)">Version</button>
     </div>
 
     <div class="tab-content active" id="home">
@@ -773,6 +775,15 @@
                 <span class="other-kicker">Updates</span>
                 <p class="other-subtitle">I will keep you informed about the latest changes and improvements to the website here.</p>
             </div>
+            <div class="update-summary" style="margin-top:12px;color:#e6d6d6;">
+
+                
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>kwaziko 1.3</h3>
+                        <div class="file-meta">added pi5 dashboard and the new UPDATE_LOG.md file summarizing recent changes and next ideas for the detailed update tab</div>
+                    </div>
+                </div>
 
             <div class="other-downloads">
                 <div class="file-item">
@@ -805,7 +816,34 @@
             </div>
         </section>
     </div>
+
+    <div class="tab-content" id="pi5-dashboard">
+        <section class="other-panel">
+            <div class="other-header">
+                <span class="other-kicker">pi5 dashboard</span>
+                <p class="other-subtitle">Access the pi5 dashboard for monitoring and managing your projects.</p>
+                <div id="pi5-time" style="font-size:1.2em;margin-top:16px;color:#fff;background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;display:inline-block;">Loading time…</div>
+                <div class="pi5-stats" style="margin-top:12px;display:flex;flex-direction:column;gap:8px;">
+                    <div style="color:#fff;">Status: <strong id="pi5-status-val">—</strong></div>
+                    <div style="color:#fff;">Host: <strong id="pi5-host-val">—</strong></div>
+                    <div style="color:#fff;">Platform: <strong id="pi5-platform-val">—</strong></div>
+                    <div style="color:#fff;">Uptime: <strong id="pi5-uptime-val">—</strong></div>
+                    <div style="color:#fff;">Memory: <strong id="pi5-memory-val">—</strong></div>
+                    <button id="pi5-refresh" class="download-btn" style="width:auto;">Refresh</button>
+                </div>
+            </div>
+        </section>
+    </div>
 </div>
+    <div class="tab-content" id="version">
+        <section class="other-panel">
+            <div class="other-header">
+                <span class="other-kicker">detailed updates</span>
+                <p class="other-subtitle">Recent changes and upcoming ideas for the site are summarized here.</p>
+            </div>
+            <div id="detailed-update-log" style="margin-top:12px;background:rgba(0,0,0,0.6);padding:12px;border-radius:8px;white-space:pre-wrap;color:#f3e7e7;display:none;"></div>
+        </section>
+    </div>
 
 <script>
     let currentTabIndex = 0;
@@ -900,6 +938,19 @@
         currentTabIndex = nextTabIndex;
     }
 
+    function showtime() {
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setTimeout(showtime, 1000);
+    }
+    showtime();
+
     const clickCounterButton = document.getElementById('click-counter-btn');
     const clickCountText = document.getElementById('click-count');
 
@@ -909,6 +960,59 @@
             clickCountText.textContent = String(clickCount);
         });
     }
+
+    function startDashboardClock() {
+        const el = document.getElementById('pi5-time');
+        if (!el) return;
+        function update() {
+            const now = new Date();
+            el.textContent = now.toLocaleString();
+        }
+        update();
+        setInterval(update, 1000);
+    }
+
+    function startPi5Info() {
+        const hostEl = document.getElementById('pi5-host-val');
+        const platformEl = document.getElementById('pi5-platform-val');
+        const uptimeEl = document.getElementById('pi5-uptime-val');
+        const memoryEl = document.getElementById('pi5-memory-val');
+        const statusEl = document.getElementById('pi5-status-val');
+        const refreshBtn = document.getElementById('pi5-refresh');
+        if (!hostEl) return;
+
+        hostEl.textContent = window.location.hostname || 'localhost';
+        platformEl.textContent = navigator.platform || navigator.userAgent;
+        memoryEl.textContent = navigator.deviceMemory ? navigator.deviceMemory + ' GB (approx)' : 'n/a';
+        let startTime = Date.now();
+
+        function updateInfo() {
+            const now = Date.now();
+            const s = Math.floor((now - startTime) / 1000);
+            const h = Math.floor(s / 3600);
+            const m = Math.floor((s % 3600) / 60);
+            const sec = s % 60;
+            uptimeEl.textContent = `${h}h ${m}m ${sec}s`;
+            statusEl.textContent = navigator.onLine ? 'online' : 'offline';
+        }
+
+        updateInfo();
+        setInterval(updateInfo, 1000);
+        if (refreshBtn) refreshBtn.addEventListener('click', updateInfo);
+    }
+
+    window.addEventListener('load', startDashboardClock);
+    window.addEventListener('load', startPi5Info);
+    function loadUpdateLog() {
+        const container = document.getElementById('detailed-update-log');
+        if (!container) return;
+        fetch('../UPDATE_LOG.md')
+            .then(resp => { if (!resp.ok) throw new Error('Not found'); return resp.text(); })
+            .then(text => { container.textContent = text; container.style.display = 'block'; })
+            .catch(() => { container.textContent = 'Update log not available.'; container.style.display = 'block'; });
+    }
+
+    window.addEventListener('load', loadUpdateLog);
 </script>
 </body>
 </html>
