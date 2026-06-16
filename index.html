@@ -856,22 +856,42 @@
         videoElement.defaultMuted = true;
 
         const tryPlay = function () {
-            videoElement.play().catch(function () {});
+            const p = videoElement.play();
+            if (p && p.catch) p.catch(function () {});
         };
 
         tryPlay();
         videoElement.addEventListener('canplay', tryPlay, { once: true });
 
+        // Unlock autoplay on any user interaction (needed for VS Code / sandboxed iframes)
         const unlockOnInteraction = function () {
-            tryPlay();
-            document.removeEventListener('click', unlockOnInteraction);
-            document.removeEventListener('touchstart', unlockOnInteraction);
-            document.removeEventListener('keydown', unlockOnInteraction);
+            document.querySelectorAll('video').forEach(function(v) {
+                v.muted = true;
+                const vp = v.play();
+                if (vp && vp.catch) vp.catch(function(){});
+            });
+            const hint = document.getElementById('video-unlock-hint');
+            if (hint) hint.remove();
         };
 
         document.addEventListener('click', unlockOnInteraction, { once: true });
         document.addEventListener('touchstart', unlockOnInteraction, { once: true });
         document.addEventListener('keydown', unlockOnInteraction, { once: true });
+
+        // Show a subtle "tap to enable video" hint if autoplay fails
+        videoElement.addEventListener('canplay', function() {
+            const p = videoElement.play();
+            if (p) p.catch(function() {
+                if (!document.getElementById('video-unlock-hint')) {
+                    const hint = document.createElement('div');
+                    hint.id = 'video-unlock-hint';
+                    hint.style.cssText = 'position:fixed;bottom:18px;right:18px;background:rgba(0,0,0,0.7);color:#fff;padding:8px 14px;border-radius:8px;font-size:13px;z-index:9999;cursor:pointer;pointer-events:auto;';
+                    hint.textContent = 'Click anywhere to enable video';
+                    document.body.appendChild(hint);
+                    hint.addEventListener('click', unlockOnInteraction, { once: true });
+                }
+            });
+        }, { once: true });
     }
 
     window.addEventListener('load', function () {
