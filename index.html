@@ -1006,7 +1006,7 @@
     function loadUpdateLog() {
         const container = document.getElementById('detailed-update-log');
         if (!container) return;
-        fetch('../UPDATE_LOG.md')
+        fetch('UPDATE_LOG.md')
             .then(resp => { if (!resp.ok) throw new Error('Not found'); return resp.text(); })
             .then(text => { container.textContent = text; container.style.display = 'block'; })
             .catch(() => { container.textContent = 'Update log not available.'; container.style.display = 'block'; });
