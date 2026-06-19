@@ -1,102 +1,396 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>kwaziko</title>
-  <meta name="description" content="kwaziko - personal website" />
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #050505;
-      --panel: #111;
-      --text: #f5f5f5;
-      --muted: #c9c9c9;
-      --accent: #a30000;
-      --accent-2: #ff4d4d;
-      --border: rgba(255, 0, 0, 0.28);
-    }
-
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(163,0,0,0.18), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(163,0,0,0.12), transparent 28%),
-        var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-    }
-
-    header {
-      padding: 72px 20px 40px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(180deg, rgba(255,0,0,0.08), transparent);
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(2.4rem, 7vw, 5rem);
-      color: var(--accent-2);
-      text-shadow: 0 0 16px rgba(255, 0, 0, 0.35);
-    }
-
-    p { color: var(--muted); }
-
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .card {
-      background: rgba(17,17,17,0.92);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin: 18px 0;
-      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(163,0,0,0.18);
-      color: #ffb1b1;
-      font-size: 0.85rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    a { color: #ff8686; }
-    ul { color: var(--muted); }
-    .small { font-size: 0.95rem; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kwaziko</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes tabSlideInFromRight {
+            from { opacity: 0; transform: translateX(36px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes tabSlideInFromLeft {
+            from { opacity: 0; transform: translateX(-36px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 5px rgba(163, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(163, 0, 0, 0.6); }
+        }
+        @keyframes buttonClick {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.98); }
+            100% { transform: scale(1); }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @keyframes bgDrift1 {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(6vw, -4vh) scale(1.12); }
+            66% { transform: translate(-4vw, 6vh) scale(0.95); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        @keyframes bgDrift2 {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-8vw, 5vh) scale(1.15); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        @keyframes gridScroll {
+            from { background-position: 0 0; }
+            to { background-position: 40px 40px; }
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #000000;
+            color: white;
+            line-height: 1.6;
+            background-image:
+                linear-gradient(rgba(163,0,0,0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(163,0,0,0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: gridScroll 6s linear infinite;
+        }
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(80px);
+        }
+        body::before {
+            width: 55vw; height: 55vw;
+            top: -15vw; left: -15vw;
+            background: radial-gradient(circle, rgba(163,0,0,0.22) 0%, transparent 70%);
+            animation: bgDrift1 18s ease-in-out infinite;
+        }
+        body::after {
+            width: 50vw; height: 50vw;
+            bottom: -10vw; right: -10vw;
+            background: radial-gradient(circle, rgba(120,0,0,0.18) 0%, transparent 70%);
+            animation: bgDrift2 22s ease-in-out infinite;
+        }
+        #site-root { position: relative; z-index: 1; opacity: 0; transform: translateY(12px); transition: opacity 0.45s ease, transform 0.45s ease; pointer-events: none; }
+        body.site-ready #site-root { opacity: 1; transform: translateY(0); pointer-events: auto; }
+        #startup-screen { position: fixed; inset: 0; z-index: 9999; overflow: hidden; background: #000; }
+        #startup-screen.startup-exit { animation: startupExit 0.8s ease forwards; }
+        .startup-video, .header-video { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.05) saturate(0.95); }
+        .startup-tint { position: absolute; inset: 0; background: linear-gradient(rgba(0, 0, 0, 0.28), rgba(0, 0, 0, 0.65)); }
+        .startup-shapes { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+        .startup-ring { width: min(38vw, 280px); aspect-ratio: 1 / 1; border-radius: 50%; border: 2px solid rgba(255, 110, 110, 0.7); box-shadow: 0 0 30px rgba(255, 0, 0, 0.45), inset 0 0 20px rgba(255, 0, 0, 0.35); animation: ringSpin 2.6s linear infinite, ringPulse 1.5s ease-in-out infinite; }
+        .startup-ring::before, .startup-ring::after { content: ""; position: absolute; inset: 14%; border-radius: 50%; border: 2px dashed rgba(255, 140, 140, 0.55); animation: ringSpin 1.8s linear infinite reverse; }
+        .startup-ring::after { inset: 28%; border-style: solid; border-color: rgba(255, 190, 190, 0.4); animation-duration: 1.2s; }
+        @keyframes ringSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes ringPulse { 0%, 100% { transform: scale(0.95); opacity: 0.85; } 50% { transform: scale(1.05); opacity: 1; } }
+        @keyframes startupExit { 0% { opacity: 1; transform: scale(1); filter: blur(0px); } 60% { opacity: 1; transform: scale(1.06); filter: blur(2px); } 100% { opacity: 0; transform: scale(1.12); filter: blur(10px); visibility: hidden; } }
+        .startup-orbit { position: absolute; border-radius: 50%; border: 1px solid rgba(255, 80, 80, 0.22); pointer-events: none; animation: ringSpin linear infinite; }
+        .startup-orbit-1 { width: min(58vw, 420px); aspect-ratio:1; border-color: rgba(255, 60, 60, 0.18); animation-duration: 7s; }
+        .startup-orbit-2 { width: min(72vw, 540px); aspect-ratio:1; border: 1px dashed rgba(255, 40, 40, 0.13); animation-duration: 11s; animation-direction: reverse; }
+        .startup-orbit-3 { width: min(86vw, 650px); aspect-ratio:1; border: 1px solid rgba(255, 20, 20, 0.08); animation-duration: 18s; }
+        .startup-orbit-1::after { content: ''; position: absolute; top: -4px; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: #ff3333; box-shadow: 0 0 8px 3px rgba(255,0,0,0.8); }
+        .startup-orbit-2::before { content: ''; position: absolute; bottom: -3px; right: 28%; width: 5px; height: 5px; border-radius: 50%; background: #ff8080; box-shadow: 0 0 6px 2px rgba(255,80,80,0.7); }
+        @keyframes scanMove { 0% { top: -4px; opacity: 0; } 5% { opacity: 1; } 95% { opacity: 0.7; } 100% { top: 100%; opacity: 0; } }
+        .startup-scan { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, rgba(255,60,60,0.7) 40%, rgba(255,120,120,1) 50%, rgba(255,60,60,0.7) 60%, transparent); box-shadow: 0 0 12px 4px rgba(255,0,0,0.35); animation: scanMove 2.8s ease-in-out infinite; pointer-events: none; z-index: 2; }
+        .startup-corners { position: absolute; inset: 20px; pointer-events: none; }
+        .startup-corner { position: absolute; width: 32px; height: 32px; border-color: rgba(255,60,60,0.7); border-style: solid; animation: cornerFade 1.2s ease-in-out infinite alternate; }
+        @keyframes cornerFade { from { opacity: 0.4; } to { opacity: 1; } }
+        .sc-tl { top:0; left:0; border-width: 2px 0 0 2px; }
+        .sc-tr { top:0; right:0; border-width: 2px 2px 0 0; }
+        .sc-bl { bottom:0; left:0; border-width: 0 0 2px 2px; }
+        .sc-br { bottom:0; right:0; border-width: 0 2px 2px 0; }
+        @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 0.7; } 100% { transform: translateY(-110vh) scale(0.4); opacity: 0; } }
+        .startup-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+        .sp { position: absolute; border-radius: 50%; background: rgba(255,80,80,0.55); animation: floatUp linear infinite; }
+        .sp:nth-child(1) { width:4px; height:4px; left:8%; bottom:5%; animation-duration:6.2s; }
+        .sp:nth-child(2) { width:3px; height:3px; left:20%; bottom:15%; animation-duration:5.7s; animation-delay:0.8s; }
+        .sp:nth-child(3) { width:5px; height:5px; left:34%; bottom:0%; animation-duration:7.1s; animation-delay:0.3s; }
+        .sp:nth-child(4) { width:2px; height:2px; left:48%; bottom:10%; animation-duration:5.2s; animation-delay:1.4s; }
+        .sp:nth-child(5) { width:4px; height:4px; left:62%; bottom:3%; animation-duration:6.8s; animation-delay:0.5s; }
+        .sp:nth-child(6) { width:3px; height:3px; left:75%; bottom:8%; animation-duration:5.5s; animation-delay:2.1s; }
+        .sp:nth-child(7) { width:5px; height:5px; left:88%; bottom:12%; animation-duration:7.4s; animation-delay:1.0s; }
+        .sp:nth-child(8) { width:2px; height:2px; left:55%; bottom:20%; animation-duration:4.9s; animation-delay:0.2s; }
+        .sp:nth-child(9) { width:4px; height:4px; left:15%; bottom:25%; animation-duration:6.3s; animation-delay:1.7s; }
+        .sp:nth-child(10) { width:3px; height:3px; left:90%; bottom:30%; animation-duration:5.8s; animation-delay:0.6s; }
+        @keyframes loadBar { 0% { width: 0%; } 40% { width: 65%; } 70% { width: 82%; } 100% { width: 100%; } }
+        .startup-bar-wrap { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: min(320px, 72vw); height: 3px; border-radius: 99px; background: rgba(255,255,255,0.07); overflow: hidden; }
+        .startup-bar-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #a30000, #ff4444); box-shadow: 0 0 8px rgba(255,0,0,0.6); animation: loadBar 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes subtitleIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .startup-subtitle { position: absolute; bottom: 58px; left: 50%; transform: translateX(-50%); color: rgba(255,140,140,0.7); font-size: 0.8em; letter-spacing: 0.22em; text-transform: uppercase; white-space: nowrap; animation: subtitleIn 0.9s ease 0.6s both; pointer-events: none; }
+        @keyframes headerBorderPulse { 0%, 100% { box-shadow: 0 4px 30px rgba(163,0,0,0.35), inset 0 -2px 20px rgba(163,0,0,0.12); } 50% { box-shadow: 0 4px 55px rgba(255,0,0,0.55), inset 0 -2px 35px rgba(255,0,0,0.22); } }
+        @keyframes shimmerSweep { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+        header { position: relative; text-align: center; min-height: 320px; padding: 24px 20px; display: flex; align-items: flex-end; justify-content: center; border-bottom: 2px solid #a30000; margin-bottom: 40px; background: #040404; overflow: hidden; animation: slideInDown 0.8s ease-out, headerBorderPulse 3s ease-in-out infinite; }
+        .header-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: contrast(1.08) saturate(0.95); z-index: 0; }
+        header::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.72) 100%); z-index: 1; }
+        header::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent 0%, #a30000 30%, #ff4444 50%, #a30000 70%, transparent 100%); box-shadow: 0 0 18px 4px rgba(255,0,0,0.5); z-index: 3; }
+        header h1 { font-size: 3.3em; letter-spacing: 2px; animation: slideInDown 0.8s ease-out; position: relative; z-index: 2; margin-bottom: 14px; background: linear-gradient(90deg, #a30000 0%, #ff6b6b 40%, #ffffff 50%, #ff6b6b 60%, #a30000 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: slideInDown 0.8s ease-out, shimmerSweep 3.5s linear infinite; }
+        .cursive { font-family: 'Cursive', sans-serif; color: #a30000; font-size: 1.2em; font-weight: bold; }
+        .container, .files-section, .other-panel { max-width: 900px; margin: 0 auto; padding: 34px; color: white; background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%); border-radius: 18px; backdrop-filter: blur(4px); box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45); overflow: hidden; }
+        .container { border: 5px solid rgba(255, 0, 0, 0.35); animation: slideInUp 0.8s ease-out; }
+        .files-section { border: 5px solid rgba(255, 0, 0, 0.35); animation: slideInUp 0.8s ease-out; }
+        .other-panel { border: 3px solid rgba(255, 0, 0, 0.35); }
+        .container p { font-size: 1.1em; }
+        .files-section h2 { font-size: 1.8em; margin-bottom: 24px; color: #a30000; letter-spacing: 1px; animation: slideInDown 0.8s ease-out; }
+        .file-item { background: rgba(10, 10, 10, 0.85); padding: 20px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #a30000; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; animation: slideInUp 0.6s ease-out; }
+        .file-item:hover { background: #151515; border-color: #ff0000; box-shadow: 0 0 10px rgba(163, 0, 0, 0.5); transform: translateY(-5px); }
+        .file-info h3 { margin: 0 0 5px 0; font-size: 1.1em; color: white; }
+        .file-meta { color: #999; font-size: 0.85em; }
+        .download-btn { background: #a30000; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-size: 0.9em; border: none; cursor: pointer; transition: all 0.3s ease; font-weight: 600; }
+        .download-btn:hover { background: #ff0000; transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
+        .download-btn:active { animation: buttonClick 0.3s ease; }
+        .normal-text { font-size: 1.1em; color: #a30000; }
+        .myself { font-family: cursive; color: #a30000; font-weight: bold; font-size: 1.2em; }
+        .tabs-shell { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 44px; border: 2px solid #a30000; border-radius: 14px; padding: 10px 14px; background: rgba(10, 0, 0, 0.55); max-width: 1200px; width: 96%; margin-left: auto; margin-right: auto; justify-content: center; animation: slideInDown 0.8s ease-out 0.2s both; }
+        .tab-btn { background: none; border: none; color: #999; font-size: 1em; padding: 10px 20px; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; font-weight: 500; }
+        .tab-btn:hover { color: #a30000; transform: translateY(-2px); }
+        .tab-btn.active { color: #a30000; border-bottom: 3px solid #a30000; animation: glowPulse 1.5s ease-in-out; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; will-change: transform, opacity; }
+        .tab-content.slide-in-right { animation: tabSlideInFromRight 0.36s cubic-bezier(0.22, 1, 0.36, 1); }
+        .tab-content.slide-in-left { animation: tabSlideInFromLeft 0.36s cubic-bezier(0.22, 1, 0.36, 1); }
+        .other-header { margin-bottom: 26px; padding-bottom: 16px; border-bottom: 2px solid rgba(255, 0, 0, 0.22); }
+        .other-kicker { display: inline-block; margin-bottom: 10px; padding: 6px 100px; border-radius: 999px; background: rgba(255, 0, 0, 0.12); color: #ff6b6b; font-size: 2em; letter-spacing: 0.12em; text-transform: uppercase; }
+        .other-title { margin-bottom: 8px; color: #ff4d4d; font-size: 2em; }
+        .tab-content ul { margin: 12px 0 0 20px; color: #e5d4d4; }
+        .tab-content li { margin-bottom: 8px; }
+        .other-subtitle { color: #d0b6b6; font-size: 1.05em; }
+        .other-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-bottom: 22px; }
+        .other-card { padding: 18px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease; }
+        .other-card:hover { transform: translateY(-4px); border-color: rgba(255, 0, 0, 0.45); background: rgba(255, 255, 255, 0.06); }
+        .glow-text-animated { color: #ff8787; animation: textGlow 1.5s ease-in-out infinite; font-size: 6.5em; }
+        @keyframes textGlow { 0%, 100% { text-shadow: 0 0 6px rgba(255, 77, 77, 0.7), 0 0 14px rgba(255, 0, 0, 0.5); } 50% { text-shadow: 0 0 10px rgba(255, 120, 120, 1), 0 0 24px rgba(255, 0, 0, 0.85); } }
+        .click-counter-wrap { margin-top: 18px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+        .click-counter-btn { background: #a30000; color: #ffffff; border: 1px solid #ff0000; border-radius: 8px; padding: 10px 16px; font-size: 1em; font-weight: 700; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease; }
+        .click-counter-btn:hover { background: #d10000; transform: translateY(-1px); box-shadow: 0 0 12px rgba(255, 0, 0, 0.45); }
+        .click-counter-btn:active { transform: scale(0.98); }
+        .click-counter-text { font-size: 1em; color: #ffd7d7; }
+        @media (max-width: 900px) { header { min-height: 220px; margin-bottom: 26px; } }
+        body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after { animation: none !important; transition: none !important; }
+        .setting-group { margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,0,0,0.12); }
+        .setting-group:last-of-type { border-bottom: none; }
+        .setting-group-label { display: block; color: rgba(255,100,100,0.7); font-size: 0.78em; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+        .settings-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .accent-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.15s, border-color 0.15s; }
+        .accent-swatch:hover { transform: scale(1.15); }
+        .accent-swatch.selected { border-color: #fff; transform: scale(1.1); }
+    </style>
 </head>
 <body>
-  <header>
-    <span class="badge">published site</span>
-    <h1>kwaziko</h1>
-    <p>Personal website</p>
-  </header>
+    <div id="startup-screen" aria-hidden="true">
+        <video class="startup-video" autoplay muted playsinline preload="auto" poster="/videos/startupbackround.mp4">
+            <source src="/videos/startupbackround.mp4" type="video/mp4">
+            Your browser does not support the startup video.
+        </video>
+        <div class="startup-tint"></div>
+        <div class="startup-particles">
+            <span class="sp"></span><span class="sp"></span><span class="sp"></span>
+            <span class="sp"></span><span class="sp"></span><span class="sp"></span>
+            <span class="sp"></span><span class="sp"></span><span class="sp"></span>
+            <span class="sp"></span>
+        </div>
+        <div class="startup-scan"></div>
+        <div class="startup-corners">
+            <div class="startup-corner sc-tl"></div>
+            <div class="startup-corner sc-tr"></div>
+            <div class="startup-corner sc-bl"></div>
+            <div class="startup-corner sc-br"></div>
+        </div>
+        <div class="startup-shapes">
+            <div class="startup-orbit startup-orbit-3"></div>
+            <div class="startup-orbit startup-orbit-2"></div>
+            <div class="startup-orbit startup-orbit-1"></div>
+            <div class="startup-ring"></div>
+            <h1 class="glow-text-animated">kwaziko.netlify.app</h1>
+        </div>
+        <p class="startup-subtitle">kwaziko is loading &gt;:D&hellip;</p>
+        <div class="startup-bar-wrap"><div class="startup-bar-fill"></div></div>
+    </div>
 
-  <main>
-    <section class="card">
-      <h2>Welcome</h2>
-      <p>This site has been set up so GitHub Pages can serve a valid landing page at the repository root.</p>
-      <p class="small">If you want the full site from <code>blog/main/index.html</code> to be published instead, I can switch the Pages source next.</p>
-    </section>
+    <div id="site-root">
+        <header>
+            <video class="header-video" autoplay muted loop playsinline preload="auto" aria-label="Top background video" poster="/videos/topvid.mp4">
+                <source src="/videos/topvid.mp4" type="video/mp4">
+                Your browser does not support the header background video.
+            </video>
+            <h1><span class="myself">kwaziko.netlify.app</span></h1>
+        </header>
 
-    <section class="card">
-      <h2>What I changed</h2>
-      <ul>
-        <li>Added a root <code>index.html</code> so Pages won’t return a 404.</li>
-        <li>Kept the page simple and safe for GitHub Pages deployment.</li>
-      </ul>
-    </section>
-  </main>
+        <div class="tabs-shell">
+            <button class="tab-btn active" data-tab="home" onclick="showTab('home', this)">Home</button>
+            <button class="tab-btn" data-tab="projects" onclick="showTab('projects', this)">Projects</button>
+            <button class="tab-btn" data-tab="downloads" onclick="showTab('downloads', this)">Downloads</button>
+            <button class="tab-btn" data-tab="about" onclick="showTab('about', this)">About</button>
+            <button class="tab-btn" data-tab="blog" onclick="showTab('blog', this)">Blog</button>
+            <button class="tab-btn" data-tab="github-downloads" onclick="showTab('github-downloads', this)">GitHub Downloads</button>
+            <button class="tab-btn" data-tab="website-updates" onclick="showTab('website-updates', this)">Website Updates</button>
+            <button class="tab-btn" data-tab="version" onclick="showTab('version', this)">Version</button>
+            <button class="tab-btn" data-tab="pi5-dashboard" onclick="showTab('pi5-dashboard', this)">pi5 dashboard</button>
+            <button class="tab-btn" data-tab="settings" onclick="showTab('settings', this)">Settings</button>
+        </div>
+
+        <div class="tab-content active" id="home">
+            <div class="container">
+                <span class="other-kicker">home</span>
+                <p>Hiya! My name is <span class="myself">Kwaz</span> <span class="cursive"></span>and I'm a teen software and coding enthusiast! I will be posting tutorials and blogs on here and even some files :D<br>I know alot about ai and machine learning!</p>
+                <p><span class="normal-text">My github is <a href="https://github.com/kwazii31/kwaziko" target="_blank">here</a></span></p>
+                <p><span class="normal-text">check out my other tabs to explore and check out my projects etc.</span></p>
+                <p><span class="normal-text">I will be updating this website alot and adding new content so check back often for updates!</span></p>
+                <p><span class="normal-text">my email is <a href="mailto:ehjarvis@protonmail.com">ehjarvis@protonmail.com</a></span></p>
+                <div class="click-counter-wrap">
+                    <button class="click-counter-btn" id="click-counter-btn" type="button">Click me</button>
+                    <span class="click-counter-text">Amount of clicks: <strong id="click-count">0</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="projects">
+            <div class="container">
+                <span class="other-kicker">My Projects</span>
+                <p>This section is for things I am currently building, testing, or polishing.</p>
+                <div class="other-kicker">main projects below</div>
+                <div class="other-card">Kwaziko: The website you're on right now:D im planning to work on this project for as long as i can. </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="downloads">
+            <section class="files-section">
+                <span class="other-kicker">non-github downloads</span>
+                <p style="margin-bottom: 16px; color: #dfcfcf;">Direct downloads for scripts and fun files. More will be added as I finish new tools.</p>
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>Source Code for this website</h3>
+                        <div class="file-meta">Text File</div>
+                    </div>
+                    <a href="sorcecode.txt" download="sorcecode.txt" class="download-btn">Download</a>
+                </div>
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>batpranks.txt</h3>
+                        <div class="file-meta">Text File</div>
+                    </div>
+                    <a href="dowloads/batpranks.txt" download="batpranks.txt" class="download-btn">Download</a>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="about">
+            <div class="container">
+                <span class="other-kicker">about me</span>
+                <p>I'm a teen into coding and web development. I know Python, HTML, and a bit of JavaScript, and I'm currently learning better frontend design, cleaner code structure, and automation. My goal is to keep leveling up and ship projects that are actually useful and fun.</p>
+            </div>
+        </div>
+
+        <div class="tab-content" id="blog">
+            <div class="container">
+                <span class="other-kicker">Blog</span>
+                <p><span class="normal-text">Quick updates, build logs, and random coding thoughts go here.</span></p>
+                <div class="blog-post">
+                    <h3>Javascript is horrible. life is great.</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="github-downloads">
+            <section class="other-panel">
+                <div class="other-header">
+                    <span class="other-kicker">GitHub downloads</span>
+                    <p class="other-subtitle">A separate space for downloads directly from my GitHub</p>
+                    <p class="other-subtitle">Unlike the downloads, these are downloads for GitHub repositories.</p>
+                </div>
+                <div class="other-grid">
+                    <div class="other-card">
+                        <a href="https://github.com/kwazii31/kwaziko" target="_blank" class="download-btn">Visit GitHub</a>
+                    </div>
+                    <div class="other-card">
+                        <span class="normal-text">I will update this whenever I update my projects or add more repositories.</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="website-updates">
+            <section class="other-panel">
+                <div class="other-header">
+                    <span class="other-kicker">website updates</span>
+                    <p class="other-subtitle">Latest change notes and progress.</p>
+                </div>
+                <div class="other-card">
+                    <div class="file-info">
+                        <h3>Version 1.3</h3>
+                        <div class="file-meta">First build of the website. I'm very excited to share it with you, and update it regularly with new features and improvements:D</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="version">
+            <section class="other-panel">
+                <div class="other-header">
+                    <span class="other-kicker">Version</span>
+                    <p class="other-subtitle">Detailed updates</p>
+                </div>
+                <div id="detailed-update-log" style="margin-top:12px;background:rgba(0,0,0,0.6);padding:12px;border-radius:8px;white-space:pre-wrap;color:#f3e7e7;display:none;"></div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="pi5-dashboard">
+            <section class="other-panel">
+                <div class="other-header">
+                    <span class="other-kicker">pi5 dashboard</span>
+                    <p class="other-subtitle">Access the pi5 dashboard for monitoring and managing your projects.</p>
+                    <div id="pi5-time" style="font-size:1.2em;margin-top:16px;color:#fff;background:rgba(0,0,0,0.25);padding:10px;border-radius:8px;display:inline-block;">Loading time…</div>
+                </div>
+            </section>
+        </div>
+
+        <div class="tab-content" id="settings">
+            <section class="other-panel">
+                <div class="other-header">
+                    <span class="other-kicker">Settings</span>
+                    <p class="other-subtitle">Customize background video behavior and appearance.</p>
+                </div>
+                <div style="margin-top:16px;color:#fff;">
+                    <div class="setting-group">
+                        <span class="setting-group-label">Background Video</span>
+                        <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-enable-video"> Enable background video</label>
+                        <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-mute"> Mute video</label>
+                        <label style="display:block;margin-bottom:8px;"><input type="checkbox" id="setting-loop"> Loop video</label>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName, clickedButton) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => tab.classList.remove('active', 'slide-in-left', 'slide-in-right'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            const target = document.getElementById(tabName);
+            if (target) {
+                target.classList.add('active');
+                target.classList.add(clickedButton && clickedButton.classList.contains('active') ? 'slide-in-left' : 'slide-in-right');
+            }
+            if (clickedButton) clickedButton.classList.add('active');
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('site-ready');
+            const btn = document.getElementById('click-counter-btn');
+            const count = document.getElementById('click-count');
+            let clicks = 0;
+            if (btn && count) btn.addEventListener('click', () => { clicks++; count.textContent = String(clicks); });
+        });
+    </script>
 </body>
 </html>
