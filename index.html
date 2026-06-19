@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kwaziko</title>
+  <meta name="description" content="kwaziko - personal website" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #111;
+      --text: #f5f5f5;
+      --muted: #c9c9c9;
+      --accent: #a30000;
+      --accent-2: #ff4d4d;
+      --border: rgba(255, 0, 0, 0.28);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(163,0,0,0.18), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(163,0,0,0.12), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      padding: 72px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,0,0,0.08), transparent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      color: var(--accent-2);
+      text-shadow: 0 0 16px rgba(255, 0, 0, 0.35);
+    }
+
+    p { color: var(--muted); }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .card {
+      background: rgba(17,17,17,0.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 18px 0;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(163,0,0,0.18);
+      color: #ffb1b1;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    a { color: #ff8686; }
+    ul { color: var(--muted); }
+    .small { font-size: 0.95rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="badge">published site</span>
+    <h1>kwaziko</h1>
+    <p>Personal website</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Welcome</h2>
+      <p>This site has been set up so GitHub Pages can serve a valid landing page at the repository root.</p>
+      <p class="small">If you want the full site from <code>blog/main/index.html</code> to be published instead, I can switch the Pages source next.</p>
+    </section>
+
+    <section class="card">
+      <h2>What I changed</h2>
+      <ul>
+        <li>Added a root <code>index.html</code> so Pages won’t return a 404.</li>
+        <li>Kept the page simple and safe for GitHub Pages deployment.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
