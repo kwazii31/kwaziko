@@ -107,6 +107,7 @@
             background-color: #000000;
             color: white;
             line-height: 1.6;
+            overflow-x: hidden;
             /* moving grid lines */
             background-image:
                 linear-gradient(rgba(163,0,0,0.07) 1px, transparent 1px),
@@ -442,7 +443,7 @@
         }
 
         header h1 {
-            font-size: 3.3em;
+            font-size: clamp(1.8rem, 5.8vw, 3.3rem);
             letter-spacing: 2px;
             animation: slideInDown 0.8s ease-out;
             position: relative;
@@ -470,7 +471,7 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 34px;
+            padding: clamp(18px, 4vw, 34px);
             color: white;
             background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
             border: 5px solid rgba(255, 0, 0, 0.35);
@@ -489,7 +490,7 @@
         .files-section {
             max-width: 900px;
             margin: 0 auto;
-            padding: 34px;
+            padding: clamp(18px, 4vw, 34px);
             color: white;
             background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
             border: 5px solid rgba(255, 0, 0, 0.35);
@@ -517,6 +518,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 14px;
             transition: all 0.3s ease;
             animation: slideInUp 0.6s ease-out;
         }
@@ -544,6 +546,11 @@
             margin: 0 0 5px 0;
             font-size: 1.1em;
             color: white;
+            overflow-wrap: anywhere;
+        }
+
+        .file-info {
+            min-width: 0;
         }
 
         .file-meta {
@@ -555,6 +562,7 @@
             background: #a30000;
             color: white;
             padding: 10px 20px;
+            min-height: 42px;
             border-radius: 5px;
             text-decoration: none;
             font-size: 0.9em;
@@ -562,6 +570,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
+            white-space: nowrap;
         }
 
         .download-btn:hover {
@@ -608,10 +617,13 @@
             color: #999;
             font-size: 1em;
             padding: 10px 20px;
+            min-height: 42px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
             transition: all 0.3s;
             font-weight: 500;
+            white-space: nowrap;
+            flex: 0 0 auto;
         }
 
         .tab-btn:hover {
@@ -645,7 +657,7 @@
         .other-panel {
             max-width: 900px;
             margin: 0 auto;
-            padding: 34px;
+            padding: clamp(18px, 4vw, 34px);
             color: white;
             background: linear-gradient(135deg, rgba(18, 2, 2, 0.82) 0%, rgba(36, 6, 6, 0.84) 45%, rgba(5, 5, 5, 0.86) 100%);
             border: 3px solid rgba(255, 0, 0, 0.35);
@@ -664,13 +676,14 @@
         .other-kicker {
             display: inline-block;
             margin-bottom: 10px;
-            padding: 6px 100px;
+            padding: 6px 18px;
             border-radius: 999px;
             background: rgba(255, 0, 0, 0.12);
             color: #ff6b6b;
-            font-size: 2em;
+            font-size: clamp(0.82rem, 2.4vw, 1rem);
             letter-spacing: 0.12em;
             text-transform: uppercase;
+            max-width: 100%;
         }
 
         .other-title {
@@ -768,7 +781,9 @@
         .glow-text-animated {
           color: #ff8787;
          animation: textGlow 1.5s ease-in-out infinite;
-                        font-size: 6.5em;
+                                                font-size: clamp(1.05rem, 8.6vw, 6.5rem);
+                                                text-align: center;
+                                                padding: 0 14px;
         }
 
         .other-downloads .file-item {
@@ -808,6 +823,7 @@
             border: 1px solid #ff0000;
             border-radius: 8px;
             padding: 10px 16px;
+            min-height: 42px;
             font-size: 1em;
             font-weight: 700;
             cursor: pointer;
@@ -856,6 +872,120 @@
             header {
                 min-height: 220px;
                 margin-bottom: 26px;
+            }
+
+            .tabs-shell {
+                width: 98%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            body {
+                background-size: 30px 30px;
+            }
+
+            header {
+                min-height: 180px;
+                padding: 18px 14px;
+            }
+
+            .tabs-shell {
+                width: 100%;
+                margin-bottom: 24px;
+                padding: 8px;
+                gap: 8px;
+                border-left: 0;
+                border-right: 0;
+                border-radius: 0;
+                justify-content: stretch;
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                overflow: visible;
+            }
+
+            .tab-btn {
+                width: 100%;
+                padding: 10px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+
+            .container,
+            .files-section,
+            .other-panel {
+                width: calc(100% - 24px);
+                border-width: 2px;
+                border-radius: 14px;
+            }
+
+            .file-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .file-item .download-btn,
+            .other-card .download-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .other-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .other-card,
+            .tutorial-card,
+            .file-item {
+                padding: 14px;
+                border-radius: 12px;
+            }
+
+            .file-meta {
+                font-size: 0.84rem;
+                line-height: 1.45;
+                overflow-wrap: anywhere;
+            }
+
+            .other-title {
+                font-size: 1.4rem;
+            }
+
+            .startup-subtitle {
+                font-size: 0.68em;
+                letter-spacing: 0.16em;
+            }
+
+            .startup-bar-wrap {
+                width: min(280px, 84vw);
+            }
+
+            #setting-select-video,
+            #setting-opacity {
+                width: 100%;
+                margin: 8px 0 0 0 !important;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .tabs-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .other-kicker {
+                letter-spacing: 0.08em;
+                font-size: 0.76rem;
+                padding: 5px 12px;
+            }
+
+            .container p,
+            .normal-text,
+            .click-counter-text {
+                font-size: 0.98rem;
+            }
+
+            .tab-btn {
+                font-size: 0.84rem;
+                padding: 8px 12px;
             }
         }
 
@@ -1127,6 +1257,13 @@
                 <p class="other-subtitle">I will keep you informed about the latest changes and improvements to the website here.</p>
             </div>
             <div class="other-downloads">
+                <div class="file-item">
+                    <div class="file-info">
+                        <h3>kwaziko 1.4</h3>
+                        <div class="file-meta">made the website better for mobile users and improved overall user experience.</div>
+                    </div>
+                </div>
+
                 <div class="file-item">
                     <div class="file-info">
                         <h3>kwaziko 1.3</h3>
