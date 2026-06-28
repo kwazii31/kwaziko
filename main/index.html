@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K0H1F72MQN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-K0H1F72MQN');
+    </script>
     <style>
         @keyframes fadeIn {
             from {
@@ -128,13 +137,15 @@
             width: 55vw; height: 55vw;
             top: -15vw; left: -15vw;
             background: radial-gradient(circle, rgba(163,0,0,0.22) 0%, transparent 70%);
-            animation: bgDrift1 18s ease-in-out infinite;
+            animation: bgDrift1 20s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            will-change: transform;
         }
         body::after {
             width: 50vw; height: 50vw;
             bottom: -10vw; right: -10vw;
             background: radial-gradient(circle, rgba(120,0,0,0.18) 0%, transparent 70%);
-            animation: bgDrift2 22s ease-in-out infinite;
+            animation: bgDrift2 24s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            will-change: transform;
         }
 
         /* ensure content sits above the blobs */
@@ -143,8 +154,9 @@
         #site-root {
             opacity: 0;
             transform: translateY(12px);
-            transition: opacity 0.45s ease, transform 0.45s ease;
+            transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
             pointer-events: none;
+            will-change: opacity, transform;
         }
 
         body.site-ready #site-root {
@@ -162,7 +174,7 @@
         }
 
         #startup-screen.startup-exit {
-            animation: startupExit 0.8s ease forwards;
+            animation: startupExit 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
         .startup-video {
@@ -192,7 +204,8 @@
             border-radius: 50%;
             border: 2px solid rgba(255, 110, 110, 0.7);
             box-shadow: 0 0 30px rgba(255, 0, 0, 0.45), inset 0 0 20px rgba(255, 0, 0, 0.35);
-            animation: ringSpin 2.6s linear infinite, ringPulse 1.5s ease-in-out infinite;
+            animation: ringSpin 2.8s linear infinite, ringPulse 1.8s cubic-bezier(0.4, 0.6, 0.6, 0.4) infinite;
+            will-change: transform;
         }
 
         .startup-ring::before,
@@ -202,14 +215,15 @@
             inset: 14%;
             border-radius: 50%;
             border: 2px dashed rgba(255, 140, 140, 0.55);
-            animation: ringSpin 1.8s linear infinite reverse;
+            animation: ringSpin 2s linear infinite reverse;
+            will-change: transform;
         }
 
         .startup-ring::after {
             inset: 28%;
             border-style: solid;
             border-color: rgba(255, 190, 190, 0.4);
-            animation-duration: 1.2s;
+            animation-duration: 1.3s;
         }
 
         @keyframes ringSpin {
@@ -236,22 +250,23 @@
             border: 1px solid rgba(255, 80, 80, 0.22);
             pointer-events: none;
             animation: ringSpin linear infinite;
+            will-change: transform;
         }
         .startup-orbit-1 {
             width: min(58vw, 420px); aspect-ratio:1;
             border-color: rgba(255, 60, 60, 0.18);
-            animation-duration: 7s;
+            animation-duration: 8s;
         }
         .startup-orbit-2 {
             width: min(72vw, 540px); aspect-ratio:1;
             border: 1px dashed rgba(255, 40, 40, 0.13);
-            animation-duration: 11s;
+            animation-duration: 12s;
             animation-direction: reverse;
         }
         .startup-orbit-3 {
             width: min(86vw, 650px); aspect-ratio:1;
             border: 1px solid rgba(255, 20, 20, 0.08);
-            animation-duration: 18s;
+            animation-duration: 20s;
         }
         .startup-orbit-1::after {
             content: '';
@@ -276,8 +291,8 @@
         /* === scan line === */
         @keyframes scanMove {
             0%   { top: -4px; opacity: 0; }
-            5%   { opacity: 1; }
-            95%  { opacity: 0.7; }
+            4%   { opacity: 1; }
+            96%  { opacity: 0.8; }
             100% { top: 100%; opacity: 0; }
         }
         .startup-scan {
@@ -286,9 +301,10 @@
             height: 2px;
             background: linear-gradient(90deg, transparent, rgba(255,60,60,0.7) 40%, rgba(255,120,120,1) 50%, rgba(255,60,60,0.7) 60%, transparent);
             box-shadow: 0 0 12px 4px rgba(255,0,0,0.35);
-            animation: scanMove 2.8s ease-in-out infinite;
+            animation: scanMove 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
             pointer-events: none;
             z-index: 2;
+            will-change: top, opacity;
         }
 
         /* === HUD corner brackets === */
@@ -302,10 +318,11 @@
             width: 32px; height: 32px;
             border-color: rgba(255,60,60,0.7);
             border-style: solid;
-            animation: cornerFade 1.2s ease-in-out infinite alternate;
+            animation: cornerFade 1.4s cubic-bezier(0.4, 0.2, 0.6, 0.8) infinite alternate;
+            will-change: opacity;
         }
         @keyframes cornerFade {
-            from { opacity: 0.4; }
+            from { opacity: 0.3; }
             to   { opacity: 1;   }
         }
         .sc-tl { top:0; left:0;  border-width: 2px 0 0 2px; }
@@ -317,6 +334,9 @@
         @keyframes floatUp {
             0%   { transform: translateY(0) scale(1);   opacity: 0.7; }
             100% { transform: translateY(-110vh) scale(0.4); opacity: 0; }
+        }
+        .sp {
+            will-change: transform, opacity;
         }
         .startup-particles {
             position: absolute;
@@ -363,7 +383,8 @@
             border-radius: 99px;
             background: linear-gradient(90deg, #a30000, #ff4444);
             box-shadow: 0 0 8px rgba(255,0,0,0.6);
-            animation: loadBar 2.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: loadBar 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            will-change: width;
         }
 
         /* === subtitle === */
@@ -381,8 +402,9 @@
             letter-spacing: 0.22em;
             text-transform: uppercase;
             white-space: nowrap;
-            animation: subtitleIn 0.9s ease 0.6s both;
+            animation: subtitleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s both;
             pointer-events: none;
+            will-change: opacity, transform;
         }
 
         /* ===== header glow border pulse ===== */
@@ -394,6 +416,9 @@
         @keyframes shimmerSweep {
             0%   { background-position: -200% center; }
             100% { background-position:  200% center; }
+        }
+        header {
+            will-change: box-shadow;
         }
 
         header {
@@ -408,7 +433,7 @@
             margin-bottom: 40px;
             background: #040404;
             overflow: hidden;
-            animation: slideInDown 0.8s ease-out, headerBorderPulse 3s ease-in-out infinite;
+            animation: slideInDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), headerBorderPulse 3.5s cubic-bezier(0.4, 0.6, 0.6, 0.4) infinite;
         }
 
         .header-video {
@@ -444,7 +469,7 @@
         header h1 {
             font-size: 3.3em;
             letter-spacing: 2px;
-            animation: slideInDown 0.8s ease-out;
+            animation: slideInDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             z-index: 2;
             margin-bottom: 14px;
@@ -459,7 +484,8 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: slideInDown 0.8s ease-out, shimmerSweep 3.5s linear infinite;
+            animation: slideInDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1), shimmerSweep 4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+            will-change: opacity, transform;
         }
         .cursive {
             font-family: 'Cursive', sans-serif;
@@ -476,10 +502,11 @@
             border: 5px solid rgba(255, 0, 0, 0.35);
             border-radius: 18px;
             line-height: 1.8;
-            animation: slideInUp 0.8s ease-out;
+            animation: slideInUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
             backdrop-filter: blur(4px);
             box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
             overflow: hidden;
+            will-change: opacity, transform;
         }
 
         .container p {
@@ -497,7 +524,8 @@
             box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
             overflow: hidden;
             backdrop-filter: blur(4px);
-            animation: slideInUp 0.8s ease-out;
+            animation: slideInUp 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: opacity, transform;
         }
 
         .files-section h2 {
@@ -505,7 +533,7 @@
             margin-bottom: 24px;
             color: #a30000;
             letter-spacing: 1px;
-            animation: slideInDown 0.8s ease-out;
+            animation: slideInDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .file-item {
@@ -517,8 +545,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
-            animation: slideInUp 0.6s ease-out;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .file-item:nth-child(2) {
@@ -536,8 +564,8 @@
         .file-item:hover {
             background: #151515;
             border-color: #ff0000;
-            box-shadow: 0 0 10px rgba(163, 0, 0, 0.5);
-            transform: translateY(-5px);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            transform: translateY(-6px);
         }
 
         .file-info h3 {
@@ -560,14 +588,15 @@
             font-size: 0.9em;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-weight: 600;
+            will-change: transform, background, box-shadow;
         }
 
         .download-btn:hover {
             background: #ff0000;
-            transform: scale(1.05);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.7);
         }
 
         .download-btn:active {
@@ -599,7 +628,7 @@
             margin-left: auto;
             margin-right: auto;
             justify-content: center;
-            animation: slideInDown 0.8s ease-out 0.2s both;
+            animation: slideInDown 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s both;
         }
 
         .tab-btn {
@@ -610,13 +639,15 @@
             padding: 10px 20px;
             cursor: pointer;
             border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-weight: 500;
+            will-change: color, transform, border-color;
         }
 
         .tab-btn:hover {
             color: #a30000;
-            transform: translateY(-2px);
+            transform: translateY(-3px);
+            border-bottom-color: rgba(163, 0, 0, 0.3);
         }
 
         .tab-btn.active {
@@ -635,11 +666,11 @@
         }
 
         .tab-content.slide-in-right {
-            animation: tabSlideInFromRight 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+            animation: tabSlideInFromRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .tab-content.slide-in-left {
-            animation: tabSlideInFromLeft 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+            animation: tabSlideInFromLeft 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .other-panel {
@@ -729,13 +760,14 @@
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform, border-color, background;
         }
 
         .other-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 0, 0, 0.45);
-            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-6px);
+            border-color: rgba(255, 0, 0, 0.6);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .other-card h3 {
@@ -758,17 +790,18 @@
 
         @keyframes textGlow {
         0%, 100% {
-            text-shadow: 0 0 6px rgba(255, 77, 77, 0.7), 0 0 14px rgba(255, 0, 0, 0.5);
+            text-shadow: 0 0 8px rgba(255, 77, 77, 0.8), 0 0 16px rgba(255, 0, 0, 0.6);
         }
         50% {
-            text-shadow: 0 0 10px rgba(255, 120, 120, 1), 0 0 24px rgba(255, 0, 0, 0.85);
+            text-shadow: 0 0 12px rgba(255, 120, 120, 1), 0 0 28px rgba(255, 0, 0, 0.9);
         }
         }
 
         .glow-text-animated {
           color: #ff8787;
-         animation: textGlow 1.5s ease-in-out infinite;
+         animation: textGlow 2s cubic-bezier(0.4, 0.6, 0.6, 0.4) infinite;
                         font-size: 6.5em;
+                        will-change: text-shadow;
         }
 
         .other-downloads .file-item {
@@ -852,10 +885,108 @@
             line-height: 1.5;
         }
 
+        .blog-toolbar {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+        }
+
+        .blog-input,
+        .blog-select {
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffe7e7;
+            border: 1px solid rgba(255, 0, 0, 0.32);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.95em;
+        }
+
+        .blog-input:focus,
+        .blog-select:focus {
+            outline: none;
+            border-color: #ff4d4d;
+            box-shadow: 0 0 0 2px rgba(255, 70, 70, 0.2);
+        }
+
+        .blog-results {
+            margin-top: 10px;
+            color: #d8b6b6;
+            font-size: 0.92em;
+        }
+
+        .blog-list {
+            margin-top: 16px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .blog-post {
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 0, 0.28);
+            background: rgba(8, 0, 0, 0.62);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 0, 0, 0.6);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .blog-post h3 {
+            color: #ffe1e1;
+            margin-bottom: 8px;
+        }
+
+        .blog-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            color: #d1aaaa;
+            font-size: 0.88em;
+            margin-bottom: 10px;
+        }
+
+        .blog-post p {
+            color: #f1dede;
+            margin-bottom: 10px;
+        }
+
+        .blog-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .blog-tag {
+            font-size: 0.78em;
+            padding: 4px 8px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 0, 0, 0.35);
+            background: rgba(255, 0, 0, 0.08);
+            color: #ffb3b3;
+        }
+
+        .blog-empty {
+            display: none;
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px dashed rgba(255, 0, 0, 0.35);
+            color: #e4bcbc;
+            background: rgba(0, 0, 0, 0.45);
+        }
+
         @media (max-width: 900px) {
             header {
                 min-height: 220px;
                 margin-bottom: 26px;
+            }
+
+            .blog-toolbar {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -979,6 +1110,8 @@
             <p><span class="normal-text">check out my other tabs to explore and check out my projects etc.</span></p>
             <p><span class="normal-text">I will be updating this website alot and adding new content so check back often for updates!</span></p>
             <p><span class="normal-text">my email is <a href="mailto:ehjarvis@protonmail.com">ehjarvis@protonmail.com</a></span></p>
+            <p><span class="other-kicker">Website Stats</span></p>
+            <p><span class="normal-text">This website has been visited :[(<span class="myself">  0  </span>)]: times</span></p>
             <div class="click-counter-wrap">
                 <button class="click-counter-btn" id="click-counter-btn" type="button">Click me</button>
                 <span class="click-counter-text">Amount of clicks: <strong id="click-count">0</strong></span>
@@ -990,7 +1123,12 @@
         <div class="container">
             <span class="other-kicker">My Projects</span>
             <p>This section is for things I am currently building, testing, or polishing.</p>
+            <div class="normal-text">
+                <ul>
+                    <li><strong>Project 1:</strong>Right now im actully foccosing on kwaziko and poring hours into this. kwaziko is me (kwazii)s website for like basicly anything for me. also its w for practicing my webskills</li>
+                </ul>
         </div>
+    </div>
     </div>
         <div class="tab-content" id="settings">
             <section class="other-panel">
@@ -1044,7 +1182,7 @@
     <div class="tab-content" id="downloads">
         <section class="files-section">
             <span class="other-kicker">non-github downloads</span>
-                <p style="margin-bottom: 16px; color: #dfcfcf;">Direct downloads for scripts and fun files. More will be added as I finish new tools.</p>
+                <p style="margin-bottom: 16px; color: #dfcfcf;">Direct downloads for scripts and fun files. More will be added as I finish new tools .</p>
             <div class="file-item">
                 <div class="file-info">
                     <h3>Source Code for this website</h3>
@@ -1082,10 +1220,61 @@
         <div class="container">
             <span class="other-kicker">Blog</span>
             <p><span class="normal-text">Quick updates, build logs, and random coding thoughts go here.</span></p>
-            <div class="blog-post">
-                <h3>Javascript is horrible. life is great.</h3>
-                
+            <div class="blog-toolbar">
+                <input id="blog-search" class="blog-input" type="search" placeholder="Search posts by title, text, or tag" aria-label="Search blog posts">
+                <select id="blog-sort" class="blog-select" aria-label="Sort blog posts">
+                    <option value="newest">Newest first</option>
+                    <option value="oldest">Oldest first</option>
+                </select>
             </div>
+            <div id="blog-results" class="blog-results">Showing all posts.</div>
+
+            <div id="blog-list" class="blog-list">
+
+                <article class="blog-post" data-date="2026-06-27" data-tags="thoughts"></article>
+                <article class="blog-post" data-date="2026-06-27" data-tags="javascript,debugging,learning">
+                    <h3>im lky to lazy to write a whole blog post sooooo, theese will be short updates</h3>
+                    <div class="blog-meta">
+                        <time datetime="2026-06-27">Jun 28, 2026</time>
+                        
+                    </div>
+                    <p>Today was one of those coding sessions where every fix created two new errors. I still pushed through, cleaned up a bunch of logic, and learned where my JavaScript habits need work.</p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">javascript</span>
+                        <span class="blog-tag">debugging</span>
+                        <span class="blog-tag">learning</span>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-date="2026-06-25" data-tags="website,design,updates">
+                    <h3>Making the site feel more like me</h3>
+                    <div class="blog-meta">
+                        <time datetime="2026-06-25">Jun 25, 2026</time>
+                        
+                    </div>
+                    <p>I upgraded visuals, polished interactions, and tightened the layout so everything feels more intentional. The goal is to make each tab look alive instead of static.</p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">website</span>
+                        <span class="blog-tag">design</span>
+                        <span class="blog-tag">updates</span>
+                    </div>
+                </article>
+
+                <article class="blog-post" data-date="2026-06-20" data-tags="python,projects,goals">
+                    <h3>Project focus for this month</h3>
+                    <div class="blog-meta">
+                        <time datetime="2026-06-20">Jun 20, 2026</time>
+                        
+                    </div>
+                    <p>Main goal: keep shipping small improvements weekly. I am balancing Python tools with frontend practice so I can build projects that look good and actually work well.</p>
+                    <div class="blog-tags">
+                        <span class="blog-tag">python</span>
+                        <span class="blog-tag">projects</span>
+                        <span class="blog-tag">goals</span>
+                    </div>
+                </article>
+            </div>
+            <div id="blog-empty" class="blog-empty">No posts match your search yet. Try another word.</div>
         </div>
     </div>
 
@@ -1135,7 +1324,29 @@
                 <span class="other-kicker">Updates</span>
                 <p class="other-subtitle">I will keep you informed about the latest changes and improvements to the website here.</p>
             </div>
+
+            
+
             <div class="other-downloads">
+
+
+                    <div class="file-item">
+                        <div class="file-info">
+                            <h3>kwaziko 1.4.1</h3>
+                            <div class="file-meta">added google tag for tracking website analytics</div>
+                        </div>
+                    </div>
+
+
+                    <div class="file-item">
+                        <div class="file-info">
+                            <h3>kwaziko 1.4</h3>
+                            <div class="file-meta">Minor improvements and bug fixes to enhance user experience.</div>
+                        </div>
+                    </div>
+
+
+
                 <div class="file-item">
                     <div class="file-info">
                         <h3>kwaziko 1.3</h3>
@@ -1180,7 +1391,12 @@
                 <span class="other-kicker">Version</span>
                 <p class="other-subtitle">Detailed updates</p>
             </div>
-            <div id="detailed-update-log" style="margin-top:12px;background:rgba(0,0,0,0.6);padding:12px;border-radius:8px;white-space:pre-wrap;color:#f3e7e7;display:none;"></div>
+            <div class="file-item">
+                <div class="file-info">
+                    <h3>specified update for kwaziko 1.4</h3>
+                    <div class="normal-text">Minor improvements and bug fixes to enhance user experience, sorry that the backrounds arnt working properly, for the LOVE OF GOD'S SAKE I CAN'T FIGURE IT OUT. hopefully it will be fixed soon tho:D. also i fixed the version tab it wassnt displaying but now it is YIPPE</div>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -1202,8 +1418,6 @@
         </section>
     </div>
     </div>
-</div>
-
 <script>
     let currentTabIndex = 0;
     let clickCount = 0;
@@ -1315,6 +1529,55 @@
             clickCount += 1;
             clickCountText.textContent = String(clickCount);
         });
+    }
+
+    function initBlogSection() {
+        const blogList = document.getElementById('blog-list');
+        const searchInput = document.getElementById('blog-search');
+        const sortSelect = document.getElementById('blog-sort');
+        const results = document.getElementById('blog-results');
+        const emptyState = document.getElementById('blog-empty');
+        if (!blogList || !searchInput || !sortSelect || !results || !emptyState) return;
+
+        const posts = Array.from(blogList.querySelectorAll('.blog-post'));
+
+        function render() {
+            const query = searchInput.value.trim().toLowerCase();
+            const sort = sortSelect.value;
+
+            posts.sort(function(a, b) {
+                const aDate = new Date(a.dataset.date || 0).getTime();
+                const bDate = new Date(b.dataset.date || 0).getTime();
+                return sort === 'oldest' ? aDate - bDate : bDate - aDate;
+            });
+
+            posts.forEach(function(post) {
+                blogList.appendChild(post);
+            });
+
+            let visibleCount = 0;
+            posts.forEach(function(post) {
+                const haystack = [
+                    post.textContent || '',
+                    post.dataset.tags || '',
+                    post.dataset.date || ''
+                ].join(' ').toLowerCase();
+
+                const show = !query || haystack.indexOf(query) !== -1;
+                post.style.display = show ? '' : 'none';
+                if (show) visibleCount += 1;
+            });
+
+            results.textContent = query
+                ? 'Showing ' + visibleCount + ' result(s) for "' + query + '".'
+                : 'Showing all ' + posts.length + ' post(s).';
+
+            emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        searchInput.addEventListener('input', render);
+        sortSelect.addEventListener('change', render);
+        render();
     }
 
     function startDashboardClock() {
@@ -1527,6 +1790,7 @@
     }
 
     window.addEventListener('load', initSettingsUI);
+    window.addEventListener('load', initBlogSection);
 
     function loadUpdateLog() {
         const container = document.getElementById('detailed-update-log');
