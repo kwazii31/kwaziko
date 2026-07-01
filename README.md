@@ -29,15 +29,11 @@ This repository exists to support several long-term goals:
 
 You can use the following links to view the web version of this project:
 
-- 🌐 **Primary Website:** *(add your live site link here)*  
-  Example: `https://kwazii31.github.io/kwaziko/`
-
-- 📄 **GitHub Pages Site:** *(add your GitHub Pages link here)*  
+- 🌐 **Primary Website:**  
   Example: `https://kwazii31.github.io/kwaziko/`
 
 
-> If GitHub Pages is enabled for this repository, the site is usually available at:  
-> **https://kwazii31.github.io/kwaziko/**
+
 
 ---
 
