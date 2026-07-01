@@ -1,15 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-0S35KX9NSW"></script>
-        <script>
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-        gtag('config', 'G-0S35KX9NSW');
-        </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog</title>
@@ -420,6 +411,14 @@
             overflow: hidden;
             animation: slideInDown 0.8s ease-out, headerBorderPulse 3s ease-in-out infinite;
         }
+        
+        .small-text {
+            font-size: 0.4em;
+            line-height: 1.4;
+            color: rgba(255,140,140,0.7);
+            margin-top: 4px;
+
+        }
 
         .header-video {
             position: absolute;
@@ -601,6 +600,31 @@
             color: #a30000;
             font-weight: bold;
             font-size: 1.2em;
+        }
+        
+        .play-btn {
+            background: #a30000;
+            color: white;
+            padding: 10px 20px;
+            min-height: 42px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.9em;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .play-btn:hover {
+            background: #ff0000;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+        }
+        
+        .play-btn:active {
+            animation: buttonClick 0.3s ease;
         }
 
         .tabs-shell {
@@ -1039,12 +1063,6 @@
         .accent-swatch:hover { transform: scale(1.15); }
         .accent-swatch.selected { border-color: #fff; transform: scale(1.1); }
 
-        .small-detail-text {
-            font-size: 0.7em;
-            color: rgba(255, 0, 0, 0.55);
-            margin-top: 4px;
-        }
-
     </style>
 </head>
         
@@ -1125,11 +1143,9 @@
             <p><span class="normal-text">I will be updating this website alot and adding new content so check back often for updates!</span></p>
             <p><span class="normal-text">my email is <a href="mailto:ehjarvis@protonmail.com">ehjarvis@protonmail.com</a></span></p>
             <p><span class="other-kicker">Website Stats</span></p>
-            <p><span class="normal-text">total visits [("<span class="myself">  1  </span>")]</span></p>
-            <p><span class="small-detail-text">(powered by google analytics)</span></p>
-
-
-            <div class="click-counter-wrap">
+            <p><span class="normal-text">total visits [(&quot; 18 &quot;)]</span></p>
+            <p><span class="small-text">(powered by google analytics)</span></p>
+            
                 <button class="click-counter-btn" id="click-counter-btn" type="button">Click me</button>
                 <span class="click-counter-text">Amount of clicks: <strong id="click-count">0</strong></span>
             </div>
@@ -1586,6 +1602,11 @@
         if (!el) return;
         el.style.opacity = '1';
         setTimeout(function() { el.style.opacity = '0'; }, 1400);
+    }
+
+    function playMusicFile() {
+        var audio = new Audio('/music/background.mp3');
+        audio.play().catch(function(e) { console.error('Failed to play music:', e); });
     }
 
     function initSettingsUI() {
