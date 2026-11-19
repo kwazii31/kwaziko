@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5+Duo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tiny5+Duo:ital,wght@0,100..900;1,100..900&family=Titan+One&display=swap" rel="stylesheet">
+	<title>Kwaziko 2.0</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="page-shell">
+  <header class="hero">
+    <div class="phrase-editor">
+      <p class="editable-typewriter" id="phrase-output" aria-live="off"></p>
+      <form class="phrase-form" id="phrase-form">
+      </form>
+    </div>
+    <h1 class="brand typewriter">Kwaziko</h1>
+    <p class="tagline typewriter">Teen software dev</p>
+  </header>
+
+  <div class="tab-buttons" role="tablist" aria-label="Portfolio sections">
+    <button class="tabbtn" id="about-tab" type="button" role="tab" aria-selected="true" aria-controls="about-panel">About me</button>
+    <button class="tabbtn" id="projects-tab" type="button" role="tab" aria-selected="false" aria-controls="projects-panel" tabindex="-1">Projects</button>
+    <button class="tabbtn" id="random-tab" type="button" role="tab" aria-selected="false" aria-controls="random-panel" tabindex="-1">Random stuff</button>
+  </div>
+
+  <section class="tab-panel" id="about-panel" role="tabpanel" aria-labelledby="about-tab">
+    <p class="panel-title">abt me :></p>
+    <p class="panel-copy">I love coding, experimenting with technology, and seeing what I can make. This site is my little hub for projects, ideas, and random stuff.</p>
+    
+    
+  </section>
+
+  <section class="tab-panel" id="projects-panel" role="tabpanel" aria-labelledby="projects-tab" hidden>
+    <article class="project">
+      <div class="panel-title">projects</div>
+      <h3 class="project-name">Kwaziko</h3>
+      <p class="panel-copy">My own website project: a place to share projects, experiments, and other random things I make.</p>
+    </article>
+    <p class="project-note">More projects will show up here as I make them.</p>
+  </section>
+
+  <section class="tab-panel" id="random-panel" role="tabpanel" aria-labelledby="random-tab" hidden>
+    <a class="collection-link" href="randomsgi.html">Open my collection</a>
+  </section>
+
+  <footer class="site-footer">Made with vs code and a sprinkle of JavaScript.</footer>
+</main>
+
+<script src="typewriter.js" defer></script>
+<script src="script.js" defer></script>
+
+</html>
